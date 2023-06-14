@@ -18,18 +18,24 @@ public class FileReader {
         return profile;
     }
 
-    private static Map<String, String> fileToMap(File file) {
+    private Map<String, String> fileToMap(File file) {
         Map<String, String> map = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(file))) {
             while (reader.ready()) {
                 String line = reader.readLine();
                 String[] split = line.split(": ");
                 map.put(split[0], split[1]);
-                System.out.println(line);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileParsingException(e);
         }
         return map;
+    }
+
+    public static class FileParsingException extends RuntimeException {
+
+        public FileParsingException(Throwable cause) {
+            super(cause);
+        }
     }
 }
